@@ -1,0 +1,91 @@
+/*
+  Class untuk method berhubungan dengan Enumeration
+
+    - penambahan enums untuk createSetToken dan Enkripsi
+    - metode konstruktor disederhanakan
+*/
+
+const encrypting = new encryptor.program()
+
+// function runTest() {
+//   console.log(encrypting.character)
+// }
+
+const enums_code = [undefined, undefined, undefined, undefined, undefined, undefined, undefined]
+const enums_list = encrypting.enums_list
+
+const obj_decrypt = encrypting.obj_decrypt
+const obj_encrypt = encrypting.obj_encrypt
+const secret_keys = encrypting.secret_keys
+
+class Enums {
+  constructor() {
+  }
+
+  /**
+   * Get basic information about the bot
+   */
+  get UPPER() {
+    enums_code.fill(EnumsCode(), 0, 1)
+    return undefined;
+  }
+
+  get LOWER() {
+    enums_code.fill(EnumsCode(), 1, 2)
+    return undefined;
+  }
+
+  get ALFANUMERIK() {
+    enums_code.fill(EnumsCode(), 3, 4)
+    return undefined
+  }
+
+  get RANDOM() {
+    enums_code.fill(EnumsCode(), 3, 4)
+    return undefined
+  }
+
+  get NUMBER() {
+    enums_code.fill(EnumsCode(), 2, 3)
+    return undefined
+  }
+
+  get ENCRYPT() {
+    enums_code.fill(EnumsCode(), 4, 5)
+    return undefined
+  }
+
+  get DECRYPT() {
+    enums_code.fill(EnumsCode(), 5, 6)
+    return undefined
+  }
+
+  get DISABLED() {
+    enums_code.fill(EnumsCode(), 6, 7)
+    return undefined
+  }
+
+}
+
+/**
+ * Function
+ */
+
+function EnumsCode() {
+
+  var result = [];
+  var panjangKode = 5;
+  //panjang hasil acakan
+  var characters = encrypting.character
+  var panjangkarakter = characters.length;
+
+  for (var i = 0; i < panjangKode; i++) {
+    result.push(characters.charAt(Math.floor(Math.random() * panjangkarakter)));
+  }
+
+  let r = result.join('')
+  return r;
+
+}
+
+
