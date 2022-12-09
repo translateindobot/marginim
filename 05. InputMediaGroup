@@ -1,0 +1,361 @@
+/*
+    Helper tambahan type inputMedia
+    --
+    jika rumit, gak usah dipakai
+    gunakan metode jadul saja
+    --
+    digunakan sebagai parameter pada sendMediaGroup atau editMessageMedia
+    Type : Array of [
+      InputMediaAudio,
+      InputMediaDocument,
+      InputMediaPhoto,
+      InputMediaVideo,
+      InputMediaAnimation
+    ]
+    Description : A JSON-serialized array describing messages to be sent, must include 2-10 items
+*/
+
+/**
+ *
+ * let inputMedia = minigram.inputMedia
+ * let media = inputMedia.PHOTO(
+ *  ["file_id", { caption : "caption" }], // media-1
+ *  ["file_id"], // media-1
+ * )
+ *
+ * bot.tg.sendMediaGroup(chat_id, media)
+ *
+*/
+
+
+class InputMedia {
+
+  /** 
+   * Format inputMedia.PHOTO(...medias)
+   * 
+   * Media is must be an Array with each array must contain this :
+   * 1. file_id => <string> File to send
+   * 2. { caption } => <string> Caption of the photo to be sent 0-1024 characters after entities parsing
+   * 3. { parse_mode } => <string> Mode for parsing entities in the photo caption
+   * 4. { caption_entities } => <Array of MessageEntity> List of special entities that appear in the caption
+   * 
+   **/
+  PHOTO(...medias) {
+
+    if (helper.typeCheck(medias[0]) !== "array") {
+      throw new Error("🚫 Media must be an array!\nFormat medias is [media, extra], [media, extra]")
+    }
+
+    if (medias.length > 10) throw new Error("⛔️ A JSON-serialized array describing messages to be sent, must include 2-10 items")
+
+    let inputMediaPhoto = []
+
+    if (medias.length > 1) {
+
+      medias.forEach(media => {
+
+        let value = {}
+
+        value.type = "photo"
+        value.media = media[0]
+        if (media[1]) {
+          if (helper.typeCheck(media[1]) == "object") {
+            if (media[1].caption) value.caption = media[1].caption
+            if (media[1].parse_mode) value.caption = media[1].parse_mode
+            if (media[1].caption_entities) value.caption = media[1].caption_entities
+          }
+        }
+
+        inputMediaPhoto.push(value)
+
+      })
+
+    } else {
+
+      let value = {}
+
+      value.type = "photo"
+      value.media = medias[0][0]
+      if (medias[0][1]) {
+        if (helper.typeCheck(medias[0][1]) == "object") {
+          if (medias[0][1].caption) value.caption = medias[0][1].caption
+          if (medias[0][1].parse_mode) value.parse_mode = medias[0][1].parse_mode
+          if (medias[0][1].caption_entities) value.caption_entities = medias[0][1].caption_entities
+        }
+      }
+
+      inputMediaPhoto.push(value)
+
+    }
+
+    return inputMediaPhoto;
+  }
+
+  /** 
+  * Format inputMedia.VIDEO(...medias)
+  * 
+  * Media is must be an Array with each array must contain this :
+  * 1. file_id => <string> File to send
+  * 2. { thumb } => <InputFile or String> Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side
+  * 3. { caption } => <string> Caption of the video to be sent, 0-1024 characters after entities parsing
+  * 4. { parse_mode } => Mode for parsing entities in the video caption
+  * 5. { caption_entities } => <Array of MessageEntity> List of special entities that appear in the caption
+  * 6. { width } => <integer> Video width
+  * 7. { height } => <integer> Video height
+  * 8. { duration } => <integer> Video duration in seconds
+  * 9. { supports_streaming } => <boolean>  Pass True if the uploaded video is suitable for streaming
+  * 
+  **/
+  VIDEO(...medias) {
+
+    if (helper.typeCheck(medias[0]) !== "array") {
+      throw new Error("🚫 Media must be an array!\nFormat medias is [file_id, extra]")
+    }
+
+    if (medias.length > 10) throw new Error("⛔️ A JSON-serialized array describing messages to be sent, must include 2-10 items")
+
+    let inputMediaVideo = []
+
+    if (medias.length > 1) {
+
+      medias.forEach(media => {
+
+        let value = {}
+
+        value.type = "video"
+        value.media = media[0]
+        if (media[1]) {
+          if (helper.typeCheck(media[1]) == "object") {
+            if (media[1].caption) value.caption = media[1].caption
+            if (media[1].parse_mode) value.caption = media[1].parse_mode
+            if (media[1].caption_entities) value.caption = media[1].caption_entities
+          }
+        }
+
+        inputMediaVideo.push(value)
+
+      })
+
+    } else {
+
+      let value = {}
+
+      value.type = "video"
+      value.media = medias[0][0]
+      if (medias[0][1]) {
+        if (helper.typeCheck(medias[0][1]) == "object") {
+          if (medias[0][1].caption) value.caption = medias[0][1].caption
+          if (medias[0][1].parse_mode) value.parse_mode = medias[0][1].parse_mode
+          if (medias[0][1].caption_entities) value.caption_entities = medias[0][1].caption_entities
+        }
+      }
+
+      inputMediaVideo.push(value)
+
+    }
+
+    return inputMediaVideo;
+  }
+
+  /** 
+  * Format inputMedia.ANIMATION(...medias)
+  * 
+  * Media is must be an Array with each array must contain this :
+  * 1. file_id => <string> File to send
+  * 2. { thumb } => <InputFile or String> Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side
+  * 3. { caption } => <string> Caption of the animation to be sent 0-1024 characters after entities parsing
+  * 4. { parse_mode } => <string> Mode for parsing entities in the animation caption
+  * 5. { caption_entities } => <Array of MessageEntity> List of special entities that appear in the caption
+  * 6. { width } => <integer> Animation width
+  * 7. { height } => <integer> Animation height
+  * 8. { duration } => <integer>  Animation duration in seconds
+  * 
+  **/
+  ANIMATION(...medias) {
+
+    if (helper.typeCheck(medias[0]) !== "array") {
+      throw new Error("🚫 Media must be an array!\nFormat medias is [media, extra], [media, extra]")
+    }
+
+    if (medias.length > 10) throw new Error("⛔️ A JSON-serialized array describing messages to be sent, must include 2-10 items")
+
+    let inputMediaAnimation = []
+
+    if (medias.length > 1) {
+
+      medias.forEach(media => {
+
+        let value = {}
+
+        value.type = "animation"
+        value.media = media[0]
+        if (media[1]) {
+          if (helper.typeCheck(media[1]) == "object") {
+            if (media[1].caption) value.caption = media[1].caption
+            if (media[1].parse_mode) value.caption = media[1].parse_mode
+            if (media[1].caption_entities) value.caption = media[1].caption_entities
+          }
+        }
+
+        inputMediaAnimation.push(value)
+
+      })
+
+    } else {
+
+      let value = {}
+
+      value.type = "animation"
+      value.media = medias[0][0]
+      if (medias[0][1]) {
+        if (helper.typeCheck(medias[0][1]) == "object") {
+          if (medias[0][1].caption) value.caption = medias[0][1].caption
+          if (medias[0][1].parse_mode) value.parse_mode = medias[0][1].parse_mode
+          if (medias[0][1].caption_entities) value.caption_entities = medias[0][1].caption_entities
+        }
+      }
+
+      inputMediaAnimation.push(value)
+
+    }
+
+    return inputMediaAnimation;
+  }
+
+  /** 
+  * Format inputMedia.AUDIO(...medias)
+  * 
+  * Media is must be an Array with each array must contain this :
+  * 1. file_id => <string> File to send
+  * 2. { thumb } => <InputFile or String> Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side
+  * 3. { caption } => <string> Caption of the audio to be sent 0-1024 characters after entities parsing
+  * 4. { parse_mode } => <string> Mode for parsing entities in the audio caption
+  * 5. { caption_entities } => <Array of MessageEntity> List of special entities that appear in the caption
+  * 6. { duration } => <integer> Duration of the audio in seconds
+  * 7. { performer } => <string> Performer of the audio
+  * 8. { title } => <string> Title of the audio
+  * 
+  **/
+  AUDIO(...medias) {
+
+    if (helper.typeCheck(medias[0]) !== "array") {
+      throw new Error("🚫 Media must be an array!\nFormat medias is [media, extra], [media, extra]")
+    }
+
+    if (medias.length > 10) throw new Error("⛔️ A JSON-serialized array describing messages to be sent, must include 2-10 items")
+
+    let inputMediaAudio = []
+
+    if (medias.length > 1) {
+
+      medias.forEach(media => {
+
+        let value = {}
+
+        value.type = "audio"
+        value.media = media[0]
+        if (media[1]) {
+          if (helper.typeCheck(media[1]) == "object") {
+            if (media[1].caption) value.caption = media[1].caption
+            if (media[1].parse_mode) value.caption = media[1].parse_mode
+            if (media[1].caption_entities) value.caption = media[1].caption_entities
+          }
+        }
+
+        inputMediaAudio.push(value)
+
+      })
+
+    } else {
+
+      let value = {}
+
+      value.type = "audio"
+      value.media = medias[0][0]
+      if (medias[0][1]) {
+        if (helper.typeCheck(medias[0][1]) == "object") {
+          if (medias[0][1].caption) value.caption = medias[0][1].caption
+          if (medias[0][1].parse_mode) value.parse_mode = medias[0][1].parse_mode
+          if (medias[0][1].caption_entities) value.caption_entities = medias[0][1].caption_entities
+        }
+      }
+
+      inputMediaAudio.push(value)
+
+    }
+
+    return inputMediaAudio;
+  }
+
+  /** 
+  * Format inputMedia.DOCUMENT(...medias)
+  * 
+  * Media is must be an Array with each array must contain this :
+  * 1. file_id => <string> File to send
+  * 2. { thumb } => <InputFile or String> Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side
+  * 3. { caption } => <string> Caption of the document to be sent 0-1024 characters after entities parsing
+  * 4. { parse_mode } => <string> Mode for parsing entities in the document caption
+  * 5. { caption_entities } => <Array of MessageEntity> List of special entities that appear in the caption
+  * 6. { disable_content_type_detection } => <boolean> Disables automatic server-side content type detection for files uploaded using multipart/form-data
+  * 
+  **/
+  DOCUMENT(...medias) {
+
+    if (helper.typeCheck(medias[0]) !== "array") {
+      throw new Error("🚫 Media must be an array!\nFormat medias is [media, extra], [media, extra]")
+    }
+
+    if (medias.length > 10) throw new Error("⛔️ A JSON-serialized array describing messages to be sent, must include 2-10 items")
+
+    let inputMediaDocument = []
+
+    if (medias.length > 1) {
+
+      medias.forEach(media => {
+
+        let value = {}
+
+        value.type = "document"
+        value.media = media[0]
+        if (media[1]) {
+          if (helper.typeCheck(media[1]) == "object") {
+            if (media[1].caption) value.caption = media[1].caption
+            if (media[1].parse_mode) value.caption = media[1].parse_mode
+            if (media[1].caption_entities) value.caption = media[1].caption_entities
+          }
+        }
+
+        inputMediaDocument.push(value)
+
+      })
+
+    } else {
+
+      let value = {}
+
+      value.type = "document"
+      value.media = medias[0][0]
+      if (medias[0][1]) {
+        if (helper.typeCheck(medias[0][1]) == "object") {
+          if (medias[0][1].caption) value.caption = medias[0][1].caption
+          if (medias[0][1].parse_mode) value.parse_mode = medias[0][1].parse_mode
+          if (medias[0][1].caption_entities) value.caption_entities = medias[0][1].caption_entities
+        }
+      }
+
+      inputMediaDocument.push(value)
+
+    }
+
+    return inputMediaDocument;
+  }
+
+
+}
+
+var inputMedia = new InputMedia;
+
+// -------
+
+
+
